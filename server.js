@@ -15,18 +15,14 @@ var app = express();
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
+app.use(helmet.frameguard({action: 'sameorigin'})); //Allow your site to be loaded in an iFrame on your own pages.
+app.use(helmet.dnsPrefetchControl({allow: false})); //Do not allow DNS prefetching.
+app.use(helmet.referrerPolicy({policy: 'same-origin'})); //Allow your site to send the referrer for your own pages.
+
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(helmet({
-  frameguard: {
-    action: 'allow-from',
-    domain: "https://edjulsin.blog"
-  },
-  policy: "same-origin",
-  dnsPrefetchControl: false
-}))
 
 //Sample front-end
 app.route('/b/:board/')
